@@ -1,40 +1,41 @@
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "Display.hpp"
+#include "../../config/DisplayConfig.hpp"
 
 Display::Display(Intel8080::Processor& processor) : processor{processor}{};
 
 void Display::notifyInstructionHasBeenExecuted(uint8_t opcode){
-    cyclesThisFrame += Intel8080::findNumberOfCyclesUsedByOpcode(opcode);
+    cyclesRanThisFrame += Intel8080::findNumberOfCyclesUsedByOpcode(opcode);
 
-    if (cyclesThisFrame >= cyclesPerFrame / 2){
+    if (cyclesRanThisFrame >= DisplayConfig::cyclesPerFrame / 2){
         if (processor.areInterruptsEnabled()){
-            if (lastExecutedInterruptAddress == endOfFrameInterruptAddress){
-                processor.interrupt(middleOfFrameInterruptAddress);
-                lastExecutedInterruptAddress = middleOfFrameInterruptAddress;
+            if (lastExecutedInterruptAddress == DisplayConfig::endOfFrameInterruptAddress){
+                processor.interrupt(DisplayConfig::middleOfFrameInterruptAddress);
+                lastExecutedInterruptAddress = DisplayConfig::middleOfFrameInterruptAddress;
             }
             else {
-                processor.interrupt(endOfFrameInterruptAddress);
-                lastExecutedInterruptAddress = endOfFrameInterruptAddress;
+                processor.interrupt(DisplayConfig::endOfFrameInterruptAddress);
+                lastExecutedInterruptAddress = DisplayConfig::endOfFrameInterruptAddress;
             }
         }
 
-        cyclesThisFrame = 0;
+        cyclesRanThisFrame = 0;
     }
 
-    if (cyclesThisFrame % 1000 == 0){
+    if (cyclesRanThisFrame % 1000 == 0){
         drawFrame();
     }
 }
 
 void Display::drawFrame(){
-    for (int col{0}; col < windowWidth; col++){
-        for (int row{0}; row < windowHeight; row++){
-            int bitsDrawn{(col * windowHeight) + row};
+    for (int col{0}; col < DisplayConfig::windowWidth; col++){
+        for (int row{0}; row < DisplayConfig::windowHeight; row++){
+            int bitsDrawn{(col * DisplayConfig::windowHeight) + row};
             int bytesDrawn{bitsDrawn / 8};
             int leftoverBitsDrawn{bitsDrawn % 8};
 
-            if (processor.readByteFromMemory(frameBufferAddress+bytesDrawn) & (1 << leftoverBitsDrawn)){
+            if (processor.readByteFromMemory(DisplayConfig::frameBufferAddress+bytesDrawn) & (1 << leftoverBitsDrawn)){
                 SDL_RenderDrawPoint(renderer, row, col);
             }
         }
@@ -45,6 +46,6 @@ void Display::drawFrame(){
 
 void Display::startVideoOutput(){
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(windowWidth, windowWidth, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(DisplayConfig::windowWidth, DisplayConfig::windowWidth, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // White
 }

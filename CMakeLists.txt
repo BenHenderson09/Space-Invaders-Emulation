@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 # Setup header files
 set(HEADER_FILES
-    src/Display/Display.hpp)
+    src/Display/Display.hpp
+    config/DisplayConfig.hpp)
 
 # Setup source files
 set(SOURCE_FILES
