@@ -5,13 +5,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 # Setup header files
 set(HEADER_FILES
-    src/Display/Display.hpp
-    config/DisplayConfig.hpp)
+    src/GraphicalDisplay/GraphicalDisplay.hpp
+    config/GraphicalDisplayConfig.hpp)
 
 # Setup source files
 set(SOURCE_FILES
     src/invaders.cpp
-    src/Display/Display.cpp)
+    src/GraphicalDisplay/GraphicalDisplay.cpp)
 
 # Create executable
 add_executable(invaders ${SOURCE_FILES} ${HEADER_FILES})

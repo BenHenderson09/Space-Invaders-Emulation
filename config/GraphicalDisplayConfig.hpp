@@ -1,9 +1,9 @@
-#ifndef DISPLAY_CONFIG
-#define DISPLAY_CONFIG
+#ifndef GRAPHICAL_DISPLAY_CONFIG
+#define GRAPHICAL_DISPLAY_CONFIG
 
 #include <cstdint>
 
-namespace DisplayConfig {
+namespace GraphicalDisplayConfig {
     const int windowWidth{224};
     const int windowHeight{256};
     const int cyclesPerFrame{4000};
