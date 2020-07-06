@@ -1,3 +1,5 @@
+#include <string>
+#include <cstdint>
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay.hpp"
@@ -40,16 +42,21 @@ void GraphicalDisplay::drawFrame(){
 
 void GraphicalDisplay::drawPixelWithRotation(int row, int col){
     if (isPixelColoured(row, col)){
-        // The framebuffer is rotated 90 degrees in memory, so undo that here.
-        SDL_RenderDrawPoint(renderer, col, GraphicalDisplayConfig::windowHeight - row);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // White
     }
+    else {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Black
+    }
+
+    // The framebuffer is rotated 90 degrees in memory, so undo that here.
+    SDL_RenderDrawPoint(renderer, col, GraphicalDisplayConfig::windowHeight - row);
 }
 
 bool GraphicalDisplay::isPixelColoured(int row, int col){
     int bitsDrawn{(col * GraphicalDisplayConfig::windowHeight) + row};
     int bytesDrawn{bitsDrawn / 8};
 
-    uint16_t addressOfByteBeingDrawn{GraphicalDisplayConfig::frameBufferAddress + bytesDrawn};
+    uint16_t addressOfByteBeingDrawn{uint16_t(GraphicalDisplayConfig::frameBufferAddress + bytesDrawn)};
     uint8_t byteBeingDrawn {processor.readByteFromMemory(addressOfByteBeingDrawn)};
     int bitsDrawnFromCurrentByte{bitsDrawn % 8};
 
@@ -58,6 +65,17 @@ bool GraphicalDisplay::isPixelColoured(int row, int col){
 
 void GraphicalDisplay::startVideoOutput(){
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(GraphicalDisplayConfig::windowWidth, GraphicalDisplayConfig::windowWidth, 0, &window, &renderer);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // White
+    SDL_CreateWindowAndRenderer(
+        GraphicalDisplayConfig::windowWidth * GraphicalDisplayConfig::windowEnlargementFactor,
+        GraphicalDisplayConfig::windowHeight * GraphicalDisplayConfig::windowEnlargementFactor,
+        0,
+        &window,
+        &renderer
+    );
+
+    SDL_RenderSetScale(
+        renderer,
+        GraphicalDisplayConfig::windowEnlargementFactor,
+        GraphicalDisplayConfig::windowEnlargementFactor
+    );
 }
