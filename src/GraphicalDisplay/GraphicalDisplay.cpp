@@ -7,6 +7,26 @@
 
 GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{};
 
+void GraphicalDisplay::openWindow(){
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_CreateWindowAndRenderer(
+        GraphicalDisplayConfig::windowWidth * GraphicalDisplayConfig::windowEnlargementFactor,
+        GraphicalDisplayConfig::windowHeight * GraphicalDisplayConfig::windowEnlargementFactor,
+        0,
+        &window,
+        &renderer
+    );
+
+    SDL_SetWindowTitle(window, GraphicalDisplayConfig::windowTitle.c_str());
+
+    SDL_RenderSetScale(
+        renderer,
+        GraphicalDisplayConfig::windowEnlargementFactor,
+        GraphicalDisplayConfig::windowEnlargementFactor
+    );
+}
+
 void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
     cyclesRanThisFrame += Intel8080::findNumberOfCyclesUsedByOpcode(opcode);
 
@@ -61,21 +81,4 @@ bool GraphicalDisplay::isPixelColoured(int row, int col){
     int bitsDrawnFromCurrentByte{bitsDrawn % 8};
 
     return byteBeingDrawn & (1 << bitsDrawnFromCurrentByte); // Extract value of next pixel
-}
-
-void GraphicalDisplay::startVideoOutput(){
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(
-        GraphicalDisplayConfig::windowWidth * GraphicalDisplayConfig::windowEnlargementFactor,
-        GraphicalDisplayConfig::windowHeight * GraphicalDisplayConfig::windowEnlargementFactor,
-        0,
-        &window,
-        &renderer
-    );
-
-    SDL_RenderSetScale(
-        renderer,
-        GraphicalDisplayConfig::windowEnlargementFactor,
-        GraphicalDisplayConfig::windowEnlargementFactor
-    );
 }

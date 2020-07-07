@@ -10,7 +10,7 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         GraphicalDisplay(Intel8080::Processor& processor);
 
         virtual void notifyInstructionHasBeenExecuted(uint8_t opcode) override;
-        void startVideoOutput();
+        void openWindow();
 
     private:
         Intel8080::Processor& processor;
