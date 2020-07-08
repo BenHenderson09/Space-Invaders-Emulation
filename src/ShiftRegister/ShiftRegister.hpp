@@ -1,5 +1,5 @@
-#ifndef SHIFT_REGISTER
-#define SHIFT_REGISTER
+#ifndef SHIFT_REGISTER_HPP
+#define SHIFT_REGISTER_HPP
 
 #include <cstdint>
 #include <Intel8080Emulator/Intel8080.hpp>

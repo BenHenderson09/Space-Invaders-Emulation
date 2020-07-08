@@ -45,7 +45,7 @@ void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
         cyclesRanThisFrame = 0;
     }
 
-    if (cyclesRanThisFrame % 1000 == 0){
+    if (cyclesRanThisFrame % 19000 == 0){
         drawFrame();
     }
 }

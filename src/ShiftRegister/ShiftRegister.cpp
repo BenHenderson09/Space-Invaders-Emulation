@@ -1,6 +1,9 @@
 #include "ShiftRegister.hpp"
+#include <iostream>
+#include <initializer_list>
+#include <Intel8080Emulator/Intel8080.hpp>
 
-ShiftRegister::ShiftRegister() : InputDevice({3}), OutputDevice({2, 4}){}
+ShiftRegister::ShiftRegister() : Intel8080::InputDevice{3}, Intel8080::OutputDevice{2, 4}{}
 
 uint8_t ShiftRegister::readByte(uint8_t portNumber) const {
     // Don't shift the specified number of bits out of range

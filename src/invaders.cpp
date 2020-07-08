@@ -1,5 +1,6 @@
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay/GraphicalDisplay.hpp"
+#include <iostream>
 #include "ShiftRegister/ShiftRegister.hpp"
 
 int main(){
@@ -12,6 +13,7 @@ int main(){
 
     processor.attachObserver(display);
     processor.attachInputDevice(shiftRegister);
+    processor.attachOutputDevice(shiftRegister);
     processor.beginEmulation();
     
     return 0;
