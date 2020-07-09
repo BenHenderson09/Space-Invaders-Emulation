@@ -5,7 +5,7 @@
 
 ShiftRegister::ShiftRegister() : Intel8080::InputDevice{3}, Intel8080::OutputDevice{2, 4}{}
 
-uint8_t ShiftRegister::readByte(uint8_t portNumber) const {
+uint8_t ShiftRegister::readByte(uint8_t portNumber, uint8_t accumulatorState) {
     // Don't shift the specified number of bits out of range
     return valueHeldInRegister >> (8 - bitsToRemainUnshifted);
 }

@@ -6,13 +6,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 # Setup header files
 set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
-    src/ShiftRegister/ShiftRegister.hpp
-    config/GraphicalDisplayConfig.hpp)
+    config/GraphicalDisplayConfig.hpp
+    src/CoinSlot/CoinSlot.hpp
+    src/ShiftRegister/ShiftRegister.hpp)
 
 # Setup source files
 set(SOURCE_FILES
     src/invaders.cpp
     src/GraphicalDisplay/GraphicalDisplay.cpp
+    src/CoinSlot/CoinSlot.cpp
     src/ShiftRegister/ShiftRegister.cpp)
 
 # Create executable

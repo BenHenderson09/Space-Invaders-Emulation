@@ -10,7 +10,7 @@ class ShiftRegister : public Intel8080::InputDevice, public Intel8080::OutputDev
     public:
         ShiftRegister();
 
-        virtual uint8_t readByte(uint8_t portNumber) const override;
+        virtual uint8_t readByte(uint8_t portNumber, uint8_t accumulatorState) override;
         virtual void writeByte(uint8_t portNumber, uint8_t byte) override;
 
     private:
