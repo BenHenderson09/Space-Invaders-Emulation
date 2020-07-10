@@ -3,17 +3,17 @@
 
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
-#include "../CoinSlot/CoinSlot.hpp"
+#include "../InteractiveDevices/InteractiveDevices.hpp"
 
 class KeypressHandler : public Intel8080::ProcessorObserver {
     public:
-        KeypressHandler(CoinSlot& coinSlot);
+        KeypressHandler(InteractiveDevices& interactiveDevices);
 
         virtual void notifyInstructionHasBeenExecuted(uint8_t opcode) override;
 
     private:
-        CoinSlot& coinSlot;
-        const std::vector<char> singlePressKeys{'c'};
+        InteractiveDevices& interactiveDevices;
+        const std::vector<char> singlePressKeys{'c', 's'};
 
         void handleKeypresses();
         bool singlePressKeyIsBeingHeldDown(const SDL_Event& event) const;

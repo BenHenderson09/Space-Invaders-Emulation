@@ -8,6 +8,7 @@ set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
     config/GraphicalDisplayConfig.hpp
     src/CoinSlot/CoinSlot.hpp
+    src/PlayerOneStartButton/PlayerOneStartButton.hpp
     src/ShiftRegister/ShiftRegister.hpp
     src/KeypressHandler/KeypressHandler.hpp)
 
@@ -16,6 +17,7 @@ set(SOURCE_FILES
     src/invaders.cpp
     src/GraphicalDisplay/GraphicalDisplay.cpp
     src/CoinSlot/CoinSlot.cpp
+    src/PlayerOneStartButton/PlayerOneStartButton.cpp
     src/ShiftRegister/ShiftRegister.cpp
     src/KeypressHandler/KeypressHandler.cpp)
 

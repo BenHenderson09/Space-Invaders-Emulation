@@ -1,8 +1,8 @@
 #ifndef COIN_SLOT_HPP
 #define COIN_SLOT_HPP
 
-#include <cstdint>
 #include <Intel8080Emulator/Intel8080.hpp>
+#include <cstdint>
 
 class CoinSlot : public Intel8080::InputDevice {
     public:

@@ -4,7 +4,7 @@
 
 CoinSlot::CoinSlot() : Intel8080::InputDevice{1}{};
 
-// Alters the first bit of port one. This specifies if a coin has been inserted.
+// Alters first bit of port one. This specifies if a coin has been inserted.
 uint8_t CoinSlot::readByte(uint8_t portNumber, uint8_t accumulatorState) {
     if (hasCoinBeenInserted){
         accumulatorState |= 1; // Set first bit

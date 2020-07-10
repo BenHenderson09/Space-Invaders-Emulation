@@ -1,18 +1,19 @@
 #include <cstdint>
+#include <Intel8080Emulator/Intel8080.hpp>
 #include <SDL2/SDL.h>
 #include <vector>
 #include <algorithm>
 #include "KeypressHandler.hpp"
-#include "../CoinSlot/CoinSlot.hpp"
+#include "../InteractiveDevices/InteractiveDevices.hpp"
 
-KeypressHandler::KeypressHandler(CoinSlot& coinSlot) : coinSlot{coinSlot}{}
+KeypressHandler::KeypressHandler(InteractiveDevices& interactiveDevices)
+    : interactiveDevices{interactiveDevices}{}
 
 void KeypressHandler::notifyInstructionHasBeenExecuted(uint8_t opcode){
     handleKeypresses();
 }
 
 void KeypressHandler::handleKeypresses(){
-
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         // Prevent holding down keys
@@ -21,7 +22,11 @@ void KeypressHandler::handleKeypresses(){
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym) {
                 case 'c':  // Insert coin
-                    coinSlot.insertCoin();
+                    interactiveDevices.coinSlot.insertCoin();
+                    break;
+
+                case 's':  // First player start button
+                    interactiveDevices.playerOneStartButton.press();
                     break;
             }
         }
