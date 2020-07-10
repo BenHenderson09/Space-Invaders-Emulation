@@ -1,5 +1,4 @@
 #include "ShiftRegister.hpp"
-#include <iostream>
 #include <initializer_list>
 #include <Intel8080Emulator/Intel8080.hpp>
 

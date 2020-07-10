@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
+#include <cstdint>
 #include "../../config/GraphicalDisplayConfig.hpp"
 
 class GraphicalDisplay : public Intel8080::ProcessorObserver {

@@ -13,7 +13,7 @@ class CoinSlot : public Intel8080::InputDevice {
         void insertCoin();
 
     private:
-        bool hasCoinBeenInserted{true};
+        bool hasCoinBeenInserted{false};
 };
 
 #endif

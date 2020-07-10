@@ -8,14 +8,16 @@ set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
     config/GraphicalDisplayConfig.hpp
     src/CoinSlot/CoinSlot.hpp
-    src/ShiftRegister/ShiftRegister.hpp)
+    src/ShiftRegister/ShiftRegister.hpp
+    src/KeypressHandler/KeypressHandler.hpp)
 
 # Setup source files
 set(SOURCE_FILES
     src/invaders.cpp
     src/GraphicalDisplay/GraphicalDisplay.cpp
     src/CoinSlot/CoinSlot.cpp
-    src/ShiftRegister/ShiftRegister.cpp)
+    src/ShiftRegister/ShiftRegister.cpp
+    src/KeypressHandler/KeypressHandler.cpp)
 
 # Create executable
 add_executable(invaders ${SOURCE_FILES} ${HEADER_FILES})
