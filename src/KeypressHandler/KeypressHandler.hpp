@@ -13,7 +13,7 @@ class KeypressHandler : public Intel8080::ProcessorObserver {
 
     private:
         InteractiveDevices& interactiveDevices;
-        const std::vector<char> singlePressKeys{'c', 's'};
+        const std::vector<SDL_KeyCode> singlePressKeys{SDLK_c, SDLK_1};
 
         void handleKeypresses();
         bool singlePressKeyIsBeingHeldDown(const SDL_Event& event) const;

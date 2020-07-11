@@ -21,13 +21,23 @@ void KeypressHandler::handleKeypresses(){
 
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym) {
-                case 'c':  // Insert coin
-                    interactiveDevices.coinSlot.insertCoin();
+                case SDLK_c:
+                    interactiveDevices.coinSlot.activate();
                     break;
 
-                case 's':  // First player start button
-                    interactiveDevices.playerOneStartButton.press();
+                case SDLK_1:
+                    interactiveDevices.playerOneStartButton.activate();
                     break;
+
+                case SDLK_UP:
+                    interactiveDevices.playerOneShootButton.activate();
+                    break;
+
+                case SDLK_RIGHT:
+                    interactiveDevices.playerOneRight.activate();
+
+                case SDLK_LEFT:
+                    interactiveDevices.playerOneLeft.activate();
             }
         }
     }

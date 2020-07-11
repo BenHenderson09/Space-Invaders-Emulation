@@ -7,8 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
     config/GraphicalDisplayConfig.hpp
-    src/CoinSlot/CoinSlot.hpp
-    src/PlayerOneStartButton/PlayerOneStartButton.hpp
+    src/InteractiveDevice/InteractiveDevice.hpp
     src/ShiftRegister/ShiftRegister.hpp
     src/KeypressHandler/KeypressHandler.hpp)
 
@@ -16,8 +15,7 @@ set(HEADER_FILES
 set(SOURCE_FILES
     src/invaders.cpp
     src/GraphicalDisplay/GraphicalDisplay.cpp
-    src/CoinSlot/CoinSlot.cpp
-    src/PlayerOneStartButton/PlayerOneStartButton.cpp
+    src/InteractiveDevice/InteractiveDevice.cpp
     src/ShiftRegister/ShiftRegister.cpp
     src/KeypressHandler/KeypressHandler.cpp)
 

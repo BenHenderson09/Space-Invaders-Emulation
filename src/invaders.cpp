@@ -21,6 +21,9 @@ int main(){
     processor.attachOutputDevice(shiftRegister);
     processor.attachInputDevice(interactiveDevices.coinSlot);
     processor.attachInputDevice(interactiveDevices.playerOneStartButton);
+    processor.attachInputDevice(interactiveDevices.playerOneShootButton);
+    processor.attachInputDevice(interactiveDevices.playerOneLeft);
+    processor.attachInputDevice(interactiveDevices.playerOneRight);
 
     // Starting up the game
     display.openWindow();
