@@ -8,6 +8,10 @@ set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
     config/GraphicalDisplayConfig.hpp
     src/InteractiveDevice/InteractiveDevice.hpp
+    src/Dipswitches/Dipswitches.hpp
+    src/Dipswitch/Dipswitch.hpp
+    src/SingleBitDipswitch/SingleBitDipswitch.hpp
+    src/TwoBitDipswitch/TwoBitDipswitch.hpp
     src/ShiftRegister/ShiftRegister.hpp
     src/KeypressHandler/KeypressHandler.hpp)
 
@@ -16,6 +20,9 @@ set(SOURCE_FILES
     src/invaders.cpp
     src/GraphicalDisplay/GraphicalDisplay.cpp
     src/InteractiveDevice/InteractiveDevice.cpp
+    src/Dipswitch/Dipswitch.cpp
+    src/SingleBitDipswitch/SingleBitDipswitch.cpp
+    src/TwoBitDipswitch/TwoBitDipswitch.cpp
     src/ShiftRegister/ShiftRegister.cpp
     src/KeypressHandler/KeypressHandler.cpp)
 

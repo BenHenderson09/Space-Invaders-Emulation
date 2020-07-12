@@ -1,5 +1,4 @@
 #include "ShiftRegister.hpp"
-#include <initializer_list>
 #include <Intel8080Emulator/Intel8080.hpp>
 
 ShiftRegister::ShiftRegister() : Intel8080::InputDevice{3}, Intel8080::OutputDevice{2, 4}{}

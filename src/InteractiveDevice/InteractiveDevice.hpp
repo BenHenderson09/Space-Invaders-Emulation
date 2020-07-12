@@ -4,7 +4,6 @@
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
 
-
 class InteractiveDevice : public Intel8080::InputDevice {
     public:
         InteractiveDevice(uint8_t portNumber, int bitIndex);

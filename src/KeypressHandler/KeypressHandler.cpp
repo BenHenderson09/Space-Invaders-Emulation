@@ -38,6 +38,20 @@ void KeypressHandler::handleKeypresses(){
 
                 case SDLK_LEFT:
                     interactiveDevices.playerOneLeft.activate();
+
+                case SDLK_2:
+                    interactiveDevices.playerTwoStartButton.activate();
+                    break;
+                
+                case SDLK_w:
+                    interactiveDevices.playerTwoShootButton.activate();
+                    break;
+
+                case SDLK_d:
+                    interactiveDevices.playerTwoRight.activate();
+
+                case SDLK_a:
+                    interactiveDevices.playerTwoLeft.activate();
             }
         }
     }

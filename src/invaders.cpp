@@ -1,5 +1,6 @@
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "InteractiveDevices/InteractiveDevices.hpp"
+#include "Dipswitches/Dipswitches.hpp"
 #include "GraphicalDisplay/GraphicalDisplay.hpp"
 #include "ShiftRegister/ShiftRegister.hpp"
 #include "KeypressHandler/KeypressHandler.hpp"
@@ -10,6 +11,7 @@ int main(){
     GraphicalDisplay display{processor};
     ShiftRegister shiftRegister;
     InteractiveDevices interactiveDevices;
+    Dipswitches dipswitches;
   
     // Mapping keyboard inputs to the original controls
     KeypressHandler keypressHandler{interactiveDevices};
@@ -24,6 +26,12 @@ int main(){
     processor.attachInputDevice(interactiveDevices.playerOneShootButton);
     processor.attachInputDevice(interactiveDevices.playerOneLeft);
     processor.attachInputDevice(interactiveDevices.playerOneRight);
+    processor.attachInputDevice(interactiveDevices.playerTwoStartButton);
+    processor.attachInputDevice(interactiveDevices.playerTwoShootButton);
+    processor.attachInputDevice(interactiveDevices.playerTwoLeft);
+    processor.attachInputDevice(interactiveDevices.playerTwoRight);
+    processor.attachInputDevice(dipswitches.coinInfoHidden);
+    processor.attachInputDevice(dipswitches.numberOfLives);
 
     // Starting up the game
     display.openWindow();
