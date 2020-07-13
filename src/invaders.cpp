@@ -30,8 +30,9 @@ int main(){
     processor.attachInputDevice(interactiveDevices.playerTwoShootButton);
     processor.attachInputDevice(interactiveDevices.playerTwoLeft);
     processor.attachInputDevice(interactiveDevices.playerTwoRight);
-    processor.attachInputDevice(dipswitches.coinInfoHidden);
     processor.attachInputDevice(dipswitches.numberOfLives);
+    processor.attachInputDevice(dipswitches.bonusLifeScore);
+    processor.attachInputDevice(dipswitches.coinInfoHidden);
 
     // Starting up the game
     display.openWindow();
