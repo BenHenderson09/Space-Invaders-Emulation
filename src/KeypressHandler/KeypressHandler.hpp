@@ -3,6 +3,7 @@
 
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
+#include <chrono>
 #include "../InteractiveDevices/InteractiveDevices.hpp"
 
 class KeypressHandler : public Intel8080::ProcessorObserver {
@@ -13,10 +14,9 @@ class KeypressHandler : public Intel8080::ProcessorObserver {
 
     private:
         InteractiveDevices& interactiveDevices;
-        const std::vector<SDL_KeyCode> singlePressKeys{SDLK_c, SDLK_1, SDLK_2};
+        std::chrono::time_point<std::chrono::system_clock> timeWhenLastKeypressHandled;
 
         void handleKeypresses();
-        bool singlePressKeyIsBeingHeldDown(const SDL_Event& event) const;
 };
 
 #endif

@@ -8,14 +8,6 @@ InteractiveDevice::InteractiveDevice(uint8_t portNumber, int bitIndex)
 uint8_t InteractiveDevice::readByte(uint8_t portNumber, uint8_t accumulatorState) {
     if (isActive){
         accumulatorState |= 1 << bitIndex; // Set the bit of the port at the specified index
-
-        // Delay clearing the bit for a few reads to allow the processor
-        // to handle activation.
-        if (numberOfReadsSinceActivated == 5){
-            deactivate();
-        }
-
-        numberOfReadsSinceActivated++;
     }
     else {
         accumulatorState &= ~(1 << bitIndex); // Clear the bit of the port at the specified index
@@ -30,5 +22,4 @@ void InteractiveDevice::activate(){
 
 void InteractiveDevice::deactivate(){
     isActive = false;
-    numberOfReadsSinceActivated = 0;
 }

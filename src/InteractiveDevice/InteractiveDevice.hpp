@@ -11,12 +11,10 @@ class InteractiveDevice : public Intel8080::InputDevice {
         virtual uint8_t readByte(uint8_t portNumber, uint8_t accumulatorState) override;
 
         void activate();
-
-    private:
         void deactivate();
 
+    private:
         bool isActive{false};
-        int numberOfReadsSinceActivated{0};
         int bitIndex;
 };
 
