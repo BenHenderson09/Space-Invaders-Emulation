@@ -35,7 +35,7 @@ int main(){
     processor.attachInputDevice(dipswitches.coinInfoHidden);
 
     // Starting up the game
-    display.openWindow();
+    display.startVideoOutput();
     processor.beginEmulation();
 
     return 0;

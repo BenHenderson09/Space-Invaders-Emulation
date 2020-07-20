@@ -9,7 +9,7 @@ namespace GraphicalDisplayConfig {
     const int windowHeight{256};
     const int windowEnlargementFactor{2};
     const std::string windowTitle{"Space Invaders"};
-    const int cyclesPerFrame{20000};
+    const int framesPerSecond{60};
 
     // Memory locations for reading video data and executing interrupts
     const uint16_t frameBufferAddress{0x2400};

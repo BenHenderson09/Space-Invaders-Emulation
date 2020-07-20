@@ -10,7 +10,7 @@ struct Dipswitches {
 
     // Bonuse life will be provided at a certain score.
     // 0 = 1500 points, 1 = 1000 at points
-    SingleBitDipswitch bonusLifeScore{0, 0}; // TODO test this
+    SingleBitDipswitch bonusLifeScore{3, 0};
 
     // If set to false, then the instructions which specify how many
     // coins to insert will not be displayed.

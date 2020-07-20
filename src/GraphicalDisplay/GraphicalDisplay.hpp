@@ -12,10 +12,11 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         GraphicalDisplay(Intel8080::Processor& processor);
 
         virtual void notifyInstructionHasBeenExecuted(uint8_t opcode) override;
-        void openWindow();
+        void startVideoOutput();
 
     private:
         Intel8080::Processor& processor;
+        bool hasVideoOutputStarted{false};
 
         // SDL objects for working with graphics
         SDL_Event event;
@@ -27,9 +28,10 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousFrameWasDrawn;
 
         // We use this to know when to send interrupts to the processor and which interrupts to send
-        int cyclesRanThisFrame{0};
         uint16_t lastExecutedInterruptAddress{GraphicalDisplayConfig::endOfFrameInterruptAddress};
 
+        void openWindow();
+        void drawFramesContinuously();
         void drawFrame();
         void drawPixelWithRotation(int row, int col);
         bool isPixelColoured(int row, int col);

@@ -30,6 +30,9 @@ set(SOURCE_FILES
 add_executable(invaders ${SOURCE_FILES} ${HEADER_FILES})
 
 # Add dependencies
+find_package(Threads REQUIRED)
+target_link_libraries(invaders LINK_PUBLIC Threads::Threads)
+
 find_library(EMU Intel8080Emulator lib)
 target_link_libraries(invaders LINK_PUBLIC ${EMU})
 

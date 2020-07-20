@@ -1,13 +1,28 @@
+#include <stdexcept>
 #include <string>
 #include <cstdint>
-#include <SDL2/SDL.h>
 #include <chrono>
+#include <thread>
+#include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay.hpp"
 #include "../../config/GraphicalDisplayConfig.hpp"
-#include <iostream>
 
 GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{};
+
+void GraphicalDisplay::startVideoOutput(){
+    if (!hasVideoOutputStarted){
+        openWindow();
+        
+        // Run in a separate detached thread
+        std::thread(&GraphicalDisplay::drawFramesContinuously, this).detach();
+        
+        hasVideoOutputStarted = true;
+    }
+    else {
+        throw std::runtime_error("The graphical display window is already open.");
+    }
+}
 
 void GraphicalDisplay::openWindow(){
     SDL_Init(SDL_INIT_VIDEO);
@@ -29,15 +44,32 @@ void GraphicalDisplay::openWindow(){
     );
 }
 
+void GraphicalDisplay::drawFramesContinuously(){
+    double secondsPerFrame{1.0 / GraphicalDisplayConfig::framesPerSecond};
+    
+    while (true) {
+        std::chrono::duration<double> elapsedTimeSincePreviousFrameDrawnInSeconds {
+            std::chrono::steady_clock::now() - timeWhenPreviousFrameWasDrawn
+        };
+
+        int timeLeftToWaitUntilNextFrameInMilliseconds {
+            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1000)
+        };
+
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(timeLeftToWaitUntilNextFrameInMilliseconds)
+        );
+
+        timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
+        drawFrame();
+    }
+}
+
 void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
     auto currentTime{std::chrono::steady_clock::now()};
 
     std::chrono::duration<double> elapsedTimeSincePreviousInterruptSentInSeconds {
         currentTime - timeWhenPreviousInterruptWasSent
-    };
-
-    std::chrono::duration<double> elapsedTimeSincePreviousFrameDrawnInSeconds {
-        currentTime - timeWhenPreviousFrameWasDrawn
     };
 
     // Alternate between two interrupts 120 times per second, meaning each interrupt operates at 60Hz
@@ -54,12 +86,6 @@ void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
                 lastExecutedInterruptAddress = GraphicalDisplayConfig::endOfFrameInterruptAddress;
             }
         }
-    }
-
-    // Graphics at 60 fps
-    if (elapsedTimeSincePreviousFrameDrawnInSeconds.count() >= 1.0/60){
-        timeWhenPreviousFrameWasDrawn = currentTime;
-        drawFrame();
     }
 }
 
