@@ -1,9 +1,11 @@
 #include <string>
 #include <cstdint>
 #include <SDL2/SDL.h>
+#include <chrono>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay.hpp"
 #include "../../config/GraphicalDisplayConfig.hpp"
+#include <iostream>
 
 GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{};
 
@@ -28,9 +30,20 @@ void GraphicalDisplay::openWindow(){
 }
 
 void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
-    cyclesRanThisFrame += Intel8080::findNumberOfCyclesUsedByOpcode(opcode);
+    auto currentTime{std::chrono::steady_clock::now()};
 
-    if (cyclesRanThisFrame >= GraphicalDisplayConfig::cyclesPerFrame / 2){
+    std::chrono::duration<double> elapsedTimeSincePreviousInterruptSentInSeconds {
+        currentTime - timeWhenPreviousInterruptWasSent
+    };
+
+    std::chrono::duration<double> elapsedTimeSincePreviousFrameDrawnInSeconds {
+        currentTime - timeWhenPreviousFrameWasDrawn
+    };
+
+    // Alternate between two interrupts 120 times per second, meaning each interrupt operates at 60Hz
+    if (elapsedTimeSincePreviousInterruptSentInSeconds.count() >= 1.0/120){
+        timeWhenPreviousInterruptWasSent = std::chrono::steady_clock::now();
+
         if (processor.areInterruptsEnabled()){
             if (lastExecutedInterruptAddress == GraphicalDisplayConfig::endOfFrameInterruptAddress){
                 processor.interrupt(GraphicalDisplayConfig::middleOfFrameInterruptAddress);
@@ -41,11 +54,11 @@ void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
                 lastExecutedInterruptAddress = GraphicalDisplayConfig::endOfFrameInterruptAddress;
             }
         }
-
-        cyclesRanThisFrame = 0;
     }
 
-    if (cyclesRanThisFrame % 19000 == 0){
+    // Graphics at 60 fps
+    if (elapsedTimeSincePreviousFrameDrawnInSeconds.count() >= 1.0/60){
+        timeWhenPreviousFrameWasDrawn = currentTime;
         drawFrame();
     }
 }

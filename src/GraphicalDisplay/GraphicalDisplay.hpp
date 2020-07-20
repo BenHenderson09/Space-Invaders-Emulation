@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
+#include <chrono>
 #include "../../config/GraphicalDisplayConfig.hpp"
 
 class GraphicalDisplay : public Intel8080::ProcessorObserver {
@@ -20,6 +21,10 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         SDL_Event event;
         SDL_Renderer *renderer;
         SDL_Window *window;
+
+        // Timekeeping
+        std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousInterruptWasSent;
+        std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousFrameWasDrawn;
 
         // We use this to know when to send interrupts to the processor and which interrupts to send
         int cyclesRanThisFrame{0};

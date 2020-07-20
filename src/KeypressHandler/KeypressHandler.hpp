@@ -14,7 +14,7 @@ class KeypressHandler : public Intel8080::ProcessorObserver {
 
     private:
         InteractiveDevices& interactiveDevices;
-        std::chrono::time_point<std::chrono::system_clock> timeWhenLastKeypressHandled;
+        std::chrono::time_point<std::chrono::steady_clock> timeWhenLastKeypressHandled;
 
         void handleKeypresses();
 };

@@ -11,19 +11,19 @@ KeypressHandler::KeypressHandler(InteractiveDevices& interactiveDevices)
     : interactiveDevices{interactiveDevices}{}
 
 void KeypressHandler::notifyInstructionHasBeenExecuted(uint8_t opcode){
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> timeSinceKeypressHandled {
+    auto currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedTimeSinceKeypressHandledInSeconds {
         currentTime - timeWhenLastKeypressHandled
     };
 
-    if (timeSinceKeypressHandled.count() > 0.01){ // More than 0.1 second elapsed
+    if (elapsedTimeSinceKeypressHandledInSeconds.count() > 0.01){
         handleKeypresses();
     }
 }
 
 void KeypressHandler::handleKeypresses(){
     SDL_Event event;
-    timeWhenLastKeypressHandled = std::chrono::high_resolution_clock::now();
+    timeWhenLastKeypressHandled = std::chrono::steady_clock::now();
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN){
