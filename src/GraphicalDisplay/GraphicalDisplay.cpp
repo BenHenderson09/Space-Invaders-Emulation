@@ -46,22 +46,42 @@ void GraphicalDisplay::openWindow(){
 
 void GraphicalDisplay::drawFramesContinuously(){
     double secondsPerFrame{1.0 / GraphicalDisplayConfig::framesPerSecond};
-    
+    int processingTimeToDeductInMicroseconds{0};
+
+    timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
+
     while (true) {
         std::chrono::duration<double> elapsedTimeSincePreviousFrameDrawnInSeconds {
             std::chrono::steady_clock::now() - timeWhenPreviousFrameWasDrawn
         };
 
-        int timeLeftToWaitUntilNextFrameInMilliseconds {
-            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1000)
+        int timeDelayInMicroseconds { // Wait time necessary to reach the specified fps
+            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1000000)
         };
 
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds(timeLeftToWaitUntilNextFrameInMilliseconds)
-        );
+        handleFrameDelay(timeDelayInMicroseconds, processingTimeToDeductInMicroseconds);
 
         timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
         drawFrame();
+    }
+}
+
+void GraphicalDisplay::handleFrameDelay(int timeDelayInMicroseconds,
+        int& processingTimeToDeductInMicroseconds){
+    if (timeDelayInMicroseconds >= 0){
+        int originalDelayInMicroseconds{timeDelayInMicroseconds};
+        timeDelayInMicroseconds -= processingTimeToDeductInMicroseconds;
+
+        if (timeDelayInMicroseconds < 0) timeDelayInMicroseconds = 0;
+
+        processingTimeToDeductInMicroseconds -=
+            originalDelayInMicroseconds - timeDelayInMicroseconds;
+
+        std::this_thread::sleep_for (std::chrono::microseconds(timeDelayInMicroseconds));
+    }
+    else {
+        // The time delay would be negative if the frame is getting drawn too slowly
+        processingTimeToDeductInMicroseconds += -timeDelayInMicroseconds;
     }
 }
 

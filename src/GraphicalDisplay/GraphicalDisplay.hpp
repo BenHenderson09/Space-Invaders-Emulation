@@ -32,6 +32,8 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
 
         void openWindow();
         void drawFramesContinuously();
+        void handleFrameDelay(int timeDelayInMicroseconds,
+            int& processingTimeToDeductInMicroseconds);
         void drawFrame();
         void drawPixelWithRotation(int row, int col);
         bool isPixelColoured(int row, int col);
