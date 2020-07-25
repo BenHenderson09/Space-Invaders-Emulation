@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <SDL2/SDL_mixer.h>
+#include <map>
 #include "../../config/SoundCircuitryConfig.hpp"
 
 class SoundCircuitry : public Intel8080::OutputDevice {
@@ -12,6 +13,8 @@ class SoundCircuitry : public Intel8080::OutputDevice {
 
         virtual void writeByte(uint8_t portNumber, uint8_t byte) override;
     private:
+        uint8_t portThreePreviousByte{0xff};
+        uint8_t portFivePreviousByte{0xff};
         bool shotHasBeenFired{false};
         bool playerHasBeenShotByInvader{false};
 
@@ -42,9 +45,22 @@ class SoundCircuitry : public Intel8080::OutputDevice {
         Mix_Chunk* spaceshipShotSound
             {Mix_LoadWAV(SoundCircuitryConfig::spaceshipShotPath.c_str())};
 
+        std::map<Mix_Chunk*, int> portThreeSoundsWithBitIndex {
+            {spaceshipFlyingSound, 0},
+            {playerShootingSound, 1},
+            {playerShotByInvaderSound, 2},
+            {invaderShotSound, 3}
+        };
+
+        std::map<Mix_Chunk*, int> portFiveSoundsWithBitIndex {
+            {firstFleetMovementSound, 0},
+            {secondFleetMovementSound, 1},
+            {thirdFleetMovementSound, 2},
+            {fourthFleetMovementSound, 3},
+            {spaceshipShotSound, 4}
+        };
+
         void playSoundEffect(Mix_Chunk* sound);
-        void playShootingSoundEffect();
-        void playShotByInvaderSoundEffect();
 };
 
 

@@ -103,5 +103,8 @@ void KeypressHandler::handleKeypresses(){
                     break;
             }
         }
+        else if (event.type == SDL_QUIT){
+            std::exit(0);
+        }
     }
 }
