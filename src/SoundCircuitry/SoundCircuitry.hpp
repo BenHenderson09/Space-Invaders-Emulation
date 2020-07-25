@@ -11,9 +11,10 @@ class SoundCircuitry : public Intel8080::OutputDevice {
         SoundCircuitry();
 
         virtual void writeByte(uint8_t portNumber, uint8_t byte) override;
-        void playSoundEffect(Mix_Chunk* sound);
-
     private:
+        bool shotHasBeenFired{false};
+        bool playerHasBeenShotByInvader{false};
+
         Mix_Chunk* firstFleetMovementSound
             {Mix_LoadWAV(SoundCircuitryConfig::firstFleetMovementPath.c_str())};
 
@@ -29,8 +30,8 @@ class SoundCircuitry : public Intel8080::OutputDevice {
         Mix_Chunk* invaderShotSound
             {Mix_LoadWAV(SoundCircuitryConfig::invaderShotPath.c_str())};
 
-        Mix_Chunk* playerShotSound
-            {Mix_LoadWAV(SoundCircuitryConfig::playerShotPath.c_str())};
+        Mix_Chunk* playerShotByInvaderSound
+            {Mix_LoadWAV(SoundCircuitryConfig::playerShotByInvaderPath.c_str())};
 
         Mix_Chunk* playerShootingSound
             {Mix_LoadWAV(SoundCircuitryConfig::playerShootingPath.c_str())};
@@ -40,6 +41,10 @@ class SoundCircuitry : public Intel8080::OutputDevice {
 
         Mix_Chunk* spaceshipShotSound
             {Mix_LoadWAV(SoundCircuitryConfig::spaceshipShotPath.c_str())};
+
+        void playSoundEffect(Mix_Chunk* sound);
+        void playShootingSoundEffect();
+        void playShotByInvaderSoundEffect();
 };
 
 
