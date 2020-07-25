@@ -1,5 +1,5 @@
-#ifndef GRAPHICAL_DISPLAY_CONFIG
-#define GRAPHICAL_DISPLAY_CONFIG
+#ifndef GRAPHICAL_DISPLAY_CONFIG_HPP
+#define GRAPHICAL_DISPLAY_CONFIG_HPP
 
 #include <cstdint>
 #include <string>

@@ -12,6 +12,7 @@ set(HEADER_FILES
     src/Dipswitch/Dipswitch.hpp
     src/SingleBitDipswitch/SingleBitDipswitch.hpp
     src/TwoBitDipswitch/TwoBitDipswitch.hpp
+    src/SoundCircuitry/SoundCircuitry.hpp
     src/ShiftRegister/ShiftRegister.hpp
     src/KeypressHandler/KeypressHandler.hpp)
 
@@ -23,6 +24,7 @@ set(SOURCE_FILES
     src/Dipswitch/Dipswitch.cpp
     src/SingleBitDipswitch/SingleBitDipswitch.cpp
     src/TwoBitDipswitch/TwoBitDipswitch.cpp
+    src/SoundCircuitry/SoundCircuitry.cpp
     src/ShiftRegister/ShiftRegister.cpp
     src/KeypressHandler/KeypressHandler.cpp)
 
@@ -38,3 +40,6 @@ target_link_libraries(invaders LINK_PUBLIC ${EMU})
 
 find_library(SDL SDL2 lib)
 target_link_libraries(invaders LINK_PUBLIC ${SDL})
+
+find_library(SDL_mixer SDL2_mixer lib)
+target_link_libraries(invaders LINK_PUBLIC ${SDL_mixer})

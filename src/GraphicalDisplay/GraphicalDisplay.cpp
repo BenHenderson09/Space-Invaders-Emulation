@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay.hpp"
 #include "../../config/GraphicalDisplayConfig.hpp"
@@ -25,8 +26,6 @@ void GraphicalDisplay::startVideoOutput(){
 }
 
 void GraphicalDisplay::openWindow(){
-    SDL_Init(SDL_INIT_VIDEO);
-
     SDL_CreateWindowAndRenderer(
         GraphicalDisplayConfig::windowWidth * GraphicalDisplayConfig::windowEnlargementFactor,
         GraphicalDisplayConfig::windowHeight * GraphicalDisplayConfig::windowEnlargementFactor,

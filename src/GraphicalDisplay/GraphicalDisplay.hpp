@@ -1,5 +1,5 @@
-#ifndef GraphicalDisplay_HPP
-#define GraphicalDisplay_HPP
+#ifndef GRAPHICAL_DISPLAY_HPP
+#define GRAPHICAL_DISPLAY_HPP
 
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
