@@ -44,6 +44,7 @@ int main(){
 
     // Starting up the game
     display.startVideoOutput();
+
     processor.beginEmulation();
 
     return 0;
