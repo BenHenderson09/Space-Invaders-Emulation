@@ -6,7 +6,7 @@
 
 struct Dipswitches {
     // 0 = 3 lives, 1 = 4 lives, 2 = 5 lives, 3 = 6 lives
-    TwoBitDipswitch numberOfLives{0, 0};
+    TwoBitDipswitch numberOfLives{0, 3};
 
     // Bonuse life will be provided at a certain score.
     // 0 = 1500 points, 1 = 1000 at points

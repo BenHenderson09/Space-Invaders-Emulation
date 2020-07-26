@@ -12,9 +12,10 @@ class SoundCircuitry : public Intel8080::OutputDevice {
         SoundCircuitry();
 
         virtual void writeByte(uint8_t portNumber, uint8_t byte) override;
+        
     private:
-        uint8_t portThreePreviousByte{0xff};
-        uint8_t portFivePreviousByte{0xff};
+        uint8_t portThreePreviousByte;
+        uint8_t portFivePreviousByte;
         bool shotHasBeenFired{false};
         bool playerHasBeenShotByInvader{false};
 
