@@ -1,16 +1,16 @@
 #ifndef KEYPRESS_HANDLER_HPP
 #define KEYPRESS_HANDLER_HPP
 
-#include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
 #include <chrono>
+#include <Intel8080Emulator/Intel8080.hpp>
 #include "../InteractiveDevices/InteractiveDevices.hpp"
 
 class KeypressHandler : public Intel8080::ProcessorObserver {
     public:
         KeypressHandler(InteractiveDevices& interactiveDevices);
 
-        virtual void notifyInstructionHasBeenExecuted(uint8_t opcode) override;
+        virtual void notifyInstructionHasBeenExecuted() override;
 
     private:
         InteractiveDevices& interactiveDevices;

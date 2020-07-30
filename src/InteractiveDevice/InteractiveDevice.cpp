@@ -3,7 +3,7 @@
 #include "InteractiveDevice.hpp"
 
 InteractiveDevice::InteractiveDevice(uint8_t portNumber, int bitIndex)
-    : Intel8080::InputDevice{portNumber}, bitIndex{bitIndex}{};
+    : Intel8080::InputDevice{portNumber}, bitIndex{bitIndex}{}
 
 uint8_t InteractiveDevice::readByte(uint8_t portNumber, uint8_t accumulatorState) {
     if (isActive){

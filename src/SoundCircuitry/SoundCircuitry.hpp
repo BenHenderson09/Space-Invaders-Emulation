@@ -2,9 +2,9 @@
 #define SOUND_CIRCUITRY_HPP
 
 #include <cstdint>
+#include <map>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <SDL2/SDL_mixer.h>
-#include <map>
 #include "../../config/SoundCircuitryConfig.hpp"
 
 class SoundCircuitry : public Intel8080::OutputDevice {

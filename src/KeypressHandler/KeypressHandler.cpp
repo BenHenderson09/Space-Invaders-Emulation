@@ -10,7 +10,7 @@
 KeypressHandler::KeypressHandler(InteractiveDevices& interactiveDevices)
     : interactiveDevices{interactiveDevices}{}
 
-void KeypressHandler::notifyInstructionHasBeenExecuted(uint8_t opcode){
+void KeypressHandler::notifyInstructionHasBeenExecuted(){
     std::chrono::duration<double> elapsedTimeSinceKeypressHandledInSeconds {
         std::chrono::steady_clock::now() - timeWhenLastKeypressHandled
     };

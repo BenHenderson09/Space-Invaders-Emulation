@@ -13,6 +13,6 @@ namespace SoundCircuitryConfig {
     const std::string playerShootingPath{"../sound/player_shooting.wav"};
     const std::string spaceshipFlyingPath{"../sound/spaceship_flying.wav"};
     const std::string spaceshipShotPath{"../sound/spaceship_shot.wav"};
-};
+}
 
 #endif

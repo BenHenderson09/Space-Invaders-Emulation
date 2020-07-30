@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.12)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
+# Check for warnings and treat all warnings as errors
+add_compile_options(-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy
+    -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs
+    -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wstrict-overflow=5
+    -Wundef -Werror -Wno-unused-parameter -Wno-reorder)
+
 # Setup header files
 set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp

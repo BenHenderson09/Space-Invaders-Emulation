@@ -1,17 +1,17 @@
 #ifndef GRAPHICAL_DISPLAY_HPP
 #define GRAPHICAL_DISPLAY_HPP
 
-#include <SDL2/SDL.h>
-#include <Intel8080Emulator/Intel8080.hpp>
 #include <cstdint>
 #include <chrono>
+#include <SDL2/SDL.h>
+#include <Intel8080Emulator/Intel8080.hpp>
 #include "../../config/GraphicalDisplayConfig.hpp"
 
 class GraphicalDisplay : public Intel8080::ProcessorObserver {
     public:
         GraphicalDisplay(Intel8080::Processor& processor);
 
-        virtual void notifyInstructionHasBeenExecuted(uint8_t opcode) override;
+        virtual void notifyInstructionHasBeenExecuted() override;
         void startVideoOutput();
 
     private:

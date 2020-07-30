@@ -1,6 +1,8 @@
 # Space Invaders Emulation
 An emulation of the original Space Invaders arcade game.
 
+<img src="screenshots/attract_mode_home.png" width="250"> <img src="screenshots/attract_mode_demo.png" width="250"> <img src="screenshots/spaceship_flying.png" width="250">
+
 ## Details
  - Made with C++
  - Built with CMake

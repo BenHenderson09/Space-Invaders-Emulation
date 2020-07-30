@@ -2,7 +2,6 @@
 #define DIPSWITCH_HPP
 
 #include <Intel8080Emulator/Intel8080.hpp>
-#include <cstdint>
 
 class Dipswitch : public Intel8080::InputDevice {
     public:
@@ -10,8 +9,8 @@ class Dipswitch : public Intel8080::InputDevice {
         virtual ~Dipswitch() = 0;
 
     protected:
-        int switchValue;
         int bitIndex;
+        int switchValue;
 };
 
 #endif

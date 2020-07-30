@@ -8,7 +8,7 @@
 #include "GraphicalDisplay.hpp"
 #include "../../config/GraphicalDisplayConfig.hpp"
 
-GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{};
+GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{}
 
 void GraphicalDisplay::startVideoOutput(){
     if (!hasVideoOutputStarted){
@@ -20,7 +20,7 @@ void GraphicalDisplay::startVideoOutput(){
         hasVideoOutputStarted = true;
     }
     else {
-        throw std::runtime_error("The graphical display window is already open.");
+        throw std::runtime_error{"The graphical display window is already open."};
     }
 }
 
@@ -83,7 +83,7 @@ void GraphicalDisplay::handleFrameDelay(int timeDelayInMicroseconds,
     }
 }
 
-void GraphicalDisplay::notifyInstructionHasBeenExecuted(uint8_t opcode){
+void GraphicalDisplay::notifyInstructionHasBeenExecuted(){
     auto currentTime{std::chrono::steady_clock::now()};
 
     std::chrono::duration<double> elapsedTimeSincePreviousInterruptSentInSeconds {
