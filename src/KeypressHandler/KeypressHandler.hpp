@@ -1,7 +1,6 @@
 #ifndef KEYPRESS_HANDLER_HPP
 #define KEYPRESS_HANDLER_HPP
 
-#include <cstdint>
 #include <chrono>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "../InteractiveDevices/InteractiveDevices.hpp"

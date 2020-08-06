@@ -12,7 +12,7 @@ add_compile_options(-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor
 # Setup header files
 set(HEADER_FILES
     src/GraphicalDisplay/GraphicalDisplay.hpp
-    config/GraphicalDisplayConfig.hpp
+    constants/GraphicalDisplayConstants.hpp
     src/InteractiveDevice/InteractiveDevice.hpp
     src/Dipswitches/Dipswitches.hpp
     src/Dipswitch/Dipswitch.hpp

@@ -14,7 +14,7 @@ uint8_t TwoBitDipswitch::readByte(uint8_t portNumber, uint8_t accumulatorState) 
         accumulatorState = (accumulatorState & ~(1 << (bitIndex+1))) | (secondBit << (bitIndex+1));
     }
     else {
-        throw std::invalid_argument{"Two bit dipswitch value must have a range from 0 to 3."};
+        throw std::out_of_range{"Two bit dipswitch value must have a range from 0 to 3."};
     }
 
     return accumulatorState;

@@ -9,8 +9,8 @@ class Dipswitch : public Intel8080::InputDevice {
         virtual ~Dipswitch() = 0;
 
     protected:
-        int bitIndex;
-        int switchValue;
+        const int bitIndex;
+        const int switchValue;
 };
 
 #endif

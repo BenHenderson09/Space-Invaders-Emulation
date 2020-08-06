@@ -1,6 +1,4 @@
 #include <Intel8080Emulator/Intel8080.hpp>
-#include <stdexcept>
-#include <string>
 #include "Dipswitch.hpp"
 
 Dipswitch::Dipswitch(int bitIndex, int switchValue)

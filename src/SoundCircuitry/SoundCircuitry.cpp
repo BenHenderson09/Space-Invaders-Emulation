@@ -1,5 +1,3 @@
-#include <string>
-#include <map>
 #include <SDL2/SDL_mixer.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "SoundCircuitry.hpp"
@@ -10,8 +8,10 @@ void SoundCircuitry::writeByte(uint8_t portNumber, uint8_t byte){
     if (portNumber == 3){
         for (const std::pair<Mix_Chunk*, int>& soundWithBitIndex : portThreeSoundsWithBitIndex){
             bool isBitAtIndexSet{byte & (1 << soundWithBitIndex.second)};
-            bool wasBitAtIndexSetPreviously{portThreePreviousByte & (1 << soundWithBitIndex.second)};
             bool isTheSpaceshipFlying{isBitAtIndexSet && soundWithBitIndex.second == 0};
+            bool wasBitAtIndexSetPreviously{
+                portThreePreviousByte & (1 << soundWithBitIndex.second)
+            };
 
             if (isBitAtIndexSet && !wasBitAtIndexSetPreviously){
                 playSoundEffect(soundWithBitIndex.first);

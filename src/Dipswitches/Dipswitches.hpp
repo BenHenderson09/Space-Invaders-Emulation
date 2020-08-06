@@ -3,18 +3,12 @@
 
 #include "../SingleBitDipswitch/SingleBitDipswitch.hpp"
 #include "../TwoBitDipswitch/TwoBitDipswitch.hpp"
+#include "../../constants/DipswitchConstants.hpp"
 
 struct Dipswitches {
-    // 0 = 3 lives, 1 = 4 lives, 2 = 5 lives, 3 = 6 lives
-    TwoBitDipswitch numberOfLives{0, 0};
-
-    // Bonuse life will be provided at a certain score.
-    // 0 = 1500 points, 1 = 1000 at points
-    SingleBitDipswitch bonusLifeScore{3, 0};
-
-    // If set to false, then the instructions which specify how many
-    // coins to insert will not be displayed.
-    SingleBitDipswitch coinInfoHidden{7, false};
+    TwoBitDipswitch numberOfLives{0, DipswitchConstants::numberOfLives};
+    SingleBitDipswitch bonusLifeScore{3, DipswitchConstants::isBonusLifeAtOneThousandPoints};
+    SingleBitDipswitch coinInfoHidden{7, DipswitchConstants::isCoinInfoHidden};
 };
 
 #endif

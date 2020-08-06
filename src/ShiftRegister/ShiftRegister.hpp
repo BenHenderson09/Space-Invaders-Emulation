@@ -4,8 +4,9 @@
 #include <cstdint>
 #include <Intel8080Emulator/Intel8080.hpp>
 
-// The shift register is a piece of external hardware in the Space Invaders arcade machine which is responsible
-// for bitwise shifting. The 8080 can shift only by one bit at a time, but the shift register can shift many bits.
+// The shift register is a piece of external hardware in the
+// Space Invaders arcade machine which is responsible for bitwise shifting.
+// The 8080 can shift only by one bit at a time, but the shift register can shift many bits.
 class ShiftRegister : public Intel8080::InputDevice, public Intel8080::OutputDevice {
     public:
         ShiftRegister();

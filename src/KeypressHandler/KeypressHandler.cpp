@@ -1,11 +1,9 @@
-#include <cstdint>
 #include <chrono>
-#include <vector>
-#include <algorithm>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include <SDL2/SDL.h>
 #include "KeypressHandler.hpp"
 #include "../InteractiveDevices/InteractiveDevices.hpp"
+#include "../../constants/KeypressHandlerConstants.hpp"
 
 KeypressHandler::KeypressHandler(InteractiveDevices& interactiveDevices)
     : interactiveDevices{interactiveDevices}{}
@@ -15,7 +13,7 @@ void KeypressHandler::notifyInstructionHasBeenExecuted(){
         std::chrono::steady_clock::now() - timeWhenLastKeypressHandled
     };
 
-    if (elapsedTimeSinceKeypressHandledInSeconds.count() > 0.01){
+    if (elapsedTimeSinceKeypressHandledInSeconds.count() > KeypressHandlerConstants::delayBetweenKeypressHandlesInSeconds){
         handleKeypresses();
     }
 }

@@ -1,12 +1,11 @@
 #include <stdexcept>
-#include <string>
 #include <cstdint>
 #include <chrono>
 #include <thread>
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 #include "GraphicalDisplay.hpp"
-#include "../../config/GraphicalDisplayConfig.hpp"
+#include "../../constants/GraphicalDisplayConstants.hpp"
 
 GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{}
 
@@ -25,25 +24,25 @@ void GraphicalDisplay::startVideoOutput(){
 }
 
 void GraphicalDisplay::openWindow(){
-    SDL_CreateWindowAndRenderer(
-        GraphicalDisplayConfig::windowWidth * GraphicalDisplayConfig::windowEnlargementFactor,
-        GraphicalDisplayConfig::windowHeight * GraphicalDisplayConfig::windowEnlargementFactor,
-        0,
-        &window,
-        &renderer
-    );
+    int width {
+        GraphicalDisplayConstants::windowWidth * GraphicalDisplayConstants::windowEnlargementFactor
+    };
 
-    SDL_SetWindowTitle(window, GraphicalDisplayConfig::windowTitle.c_str());
+    int height {
+        GraphicalDisplayConstants::windowHeight * GraphicalDisplayConstants::windowEnlargementFactor
+    };
 
+    SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
+    SDL_SetWindowTitle(window, GraphicalDisplayConstants::windowTitle.c_str());
     SDL_RenderSetScale(
         renderer,
-        GraphicalDisplayConfig::windowEnlargementFactor,
-        GraphicalDisplayConfig::windowEnlargementFactor
+        GraphicalDisplayConstants::windowEnlargementFactor,
+        GraphicalDisplayConstants::windowEnlargementFactor
     );
 }
 
 void GraphicalDisplay::drawFramesContinuously(){
-    double secondsPerFrame{1.0 / GraphicalDisplayConfig::framesPerSecond};
+    double secondsPerFrame{1.0 / GraphicalDisplayConstants::framesPerSecond};
     int processingTimeToDeductInMicroseconds{0};
 
     timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
@@ -54,7 +53,7 @@ void GraphicalDisplay::drawFramesContinuously(){
         };
 
         int timeDelayInMicroseconds { // Wait time necessary to reach the specified fps
-            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1000000)
+            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1e6)
         };
 
         handleFrameDelay(timeDelayInMicroseconds, processingTimeToDeductInMicroseconds);
@@ -90,26 +89,34 @@ void GraphicalDisplay::notifyInstructionHasBeenExecuted(){
         currentTime - timeWhenPreviousInterruptWasSent
     };
 
-    // Alternate between two interrupts 120 times per second, meaning each interrupt operates at 60Hz
-    if (elapsedTimeSincePreviousInterruptSentInSeconds.count() >= 1.0/120){
+    // Alternate between two interrupts 120 times per
+    // second, meaning each interrupt operates at 60Hz
+    if (elapsedTimeSincePreviousInterruptSentInSeconds.count() >= 1.0 / GraphicalDisplayConstants::interruptsPerSecond){
         timeWhenPreviousInterruptWasSent = std::chrono::steady_clock::now();
 
         if (processor.areInterruptsEnabled()){
-            if (lastExecutedInterruptAddress == GraphicalDisplayConfig::endOfFrameInterruptAddress){
-                processor.interrupt(GraphicalDisplayConfig::middleOfFrameInterruptAddress);
-                lastExecutedInterruptAddress = GraphicalDisplayConfig::middleOfFrameInterruptAddress;
+            bool wasLastInterruptForEndOfFrame {
+                previousInterruptHandlerNumber ==
+                GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber
+            };
+
+            if (wasLastInterruptForEndOfFrame){
+                processor.interrupt(GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber);
+                previousInterruptHandlerNumber =
+                    GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber;
             }
             else {
-                processor.interrupt(GraphicalDisplayConfig::endOfFrameInterruptAddress);
-                lastExecutedInterruptAddress = GraphicalDisplayConfig::endOfFrameInterruptAddress;
+                processor.interrupt(GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber);
+                previousInterruptHandlerNumber =
+                    GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber;
             }
         }
     }
 }
 
 void GraphicalDisplay::drawFrame(){
-    for (int col{0}; col < GraphicalDisplayConfig::windowWidth; col++){
-        for (int row{0}; row < GraphicalDisplayConfig::windowHeight; row++){
+    for (int col{0}; col < GraphicalDisplayConstants::windowWidth; col++){
+        for (int row{0}; row < GraphicalDisplayConstants::windowHeight; row++){
             drawPixelWithRotation(row, col);
         }
     }
@@ -126,16 +133,19 @@ void GraphicalDisplay::drawPixelWithRotation(int row, int col){
     }
 
     // The framebuffer is rotated 90 degrees in memory, so undo that here.
-    SDL_RenderDrawPoint(renderer, col, GraphicalDisplayConfig::windowHeight - row);
+    SDL_RenderDrawPoint(renderer, col, GraphicalDisplayConstants::windowHeight - row);
 }
 
 bool GraphicalDisplay::isPixelColoured(int row, int col){
-    int bitsDrawn{(col * GraphicalDisplayConfig::windowHeight) + row};
-    int bytesDrawn{bitsDrawn / 8};
+    int numberOfBitsDrawn{(col * GraphicalDisplayConstants::windowHeight) + row};
+    int numberOfBytesDrawn{numberOfBitsDrawn / 8};
 
-    uint16_t addressOfByteBeingDrawn{uint16_t(GraphicalDisplayConfig::frameBufferAddress + bytesDrawn)};
+    uint16_t addressOfByteBeingDrawn{static_cast<uint16_t>(
+        GraphicalDisplayConstants::frameBufferAddress + numberOfBytesDrawn
+    )};
+
     uint8_t byteBeingDrawn {processor.readByteFromMemory(addressOfByteBeingDrawn)};
-    int bitsDrawnFromCurrentByte{bitsDrawn % 8};
+    int bitsDrawnFromCurrentByte{numberOfBitsDrawn % 8};
 
     return byteBeingDrawn & (1 << bitsDrawnFromCurrentByte); // Extract value of next pixel
 }

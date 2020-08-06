@@ -5,7 +5,6 @@
 #include <chrono>
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
-#include "../../config/GraphicalDisplayConfig.hpp"
 
 class GraphicalDisplay : public Intel8080::ProcessorObserver {
     public:
@@ -27,8 +26,9 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousInterruptWasSent;
         std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousFrameWasDrawn;
 
-        // We use this to know when to send interrupts to the processor and which interrupts to send
-        uint16_t lastExecutedInterruptAddress{GraphicalDisplayConfig::endOfFrameInterruptAddress};
+        // We use this to know when to send interrupts
+        // to the processor and which interrupts to send
+        uint16_t previousInterruptHandlerNumber;
 
         void openWindow();
         void drawFramesContinuously();

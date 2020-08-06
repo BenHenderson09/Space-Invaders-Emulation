@@ -7,10 +7,10 @@ InteractiveDevice::InteractiveDevice(uint8_t portNumber, int bitIndex)
 
 uint8_t InteractiveDevice::readByte(uint8_t portNumber, uint8_t accumulatorState) {
     if (isActive){
-        accumulatorState |= 1 << bitIndex; // Set the bit of the port at the specified index
+        accumulatorState |= 1 << bitIndex; // Set bit at the bit index
     }
     else {
-        accumulatorState &= ~(1 << bitIndex); // Clear the bit of the port at the specified index
+        accumulatorState &= ~(1 << bitIndex); // Clear bit at the bit index
     }
 
     return accumulatorState;
