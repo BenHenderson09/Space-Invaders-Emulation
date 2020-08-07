@@ -38,9 +38,9 @@ int main(){
     processor.attachInputDevice(interactiveDevices.playerTwoShootButton);
     processor.attachInputDevice(interactiveDevices.playerTwoLeft);
     processor.attachInputDevice(interactiveDevices.playerTwoRight);
-    processor.attachInputDevice(dipswitches.numberOfLives);
-    processor.attachInputDevice(dipswitches.bonusLifeScore);
-    processor.attachInputDevice(dipswitches.coinInfoHidden);
+    processor.attachInputDevice(dipswitches.numberOfLivesSwitch);
+    processor.attachInputDevice(dipswitches.bonusLifeSwitch);
+    processor.attachInputDevice(dipswitches.coinInfoHiddenSwitch);
 
     // Starting up the game
     display.startVideoOutput();

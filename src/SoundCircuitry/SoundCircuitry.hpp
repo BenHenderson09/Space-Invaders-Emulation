@@ -16,8 +16,6 @@ class SoundCircuitry : public Intel8080::OutputDevice {
     private:
         uint8_t portThreePreviousByte;
         uint8_t portFivePreviousByte;
-        bool shotHasBeenFired{false};
-        bool playerHasBeenShotByInvader{false};
 
         Mix_Chunk* firstFleetMovementSound
             {Mix_LoadWAV(SoundCircuitryConstants::firstFleetMovementSoundPath.c_str())};
@@ -46,22 +44,28 @@ class SoundCircuitry : public Intel8080::OutputDevice {
         Mix_Chunk* spaceshipShotSound
             {Mix_LoadWAV(SoundCircuitryConstants::spaceshipShotSoundPath.c_str())};
 
-        std::map<Mix_Chunk*, int> portThreeSoundsWithBitIndex {
-            {spaceshipFlyingSound, 0},
-            {playerShootingSound, 1},
-            {playerShotByInvaderSound, 2},
-            {invaderShotSound, 3}
+        std::map<Mix_Chunk*, int> portThreeSoundsMappedToBitIndexes {
+            {spaceshipFlyingSound, SoundCircuitryConstants::bitIndexOfSpaceshipFlyingSound},
+            {playerShootingSound, SoundCircuitryConstants::bitIndexOfPlayerShoootingSound},
+            {playerShotByInvaderSound, SoundCircuitryConstants::bitIndexOfPlayerShotByInvaderSound},
+            {invaderShotSound, SoundCircuitryConstants::bitIndexOfInvaderShotSound}
         };
 
-        std::map<Mix_Chunk*, int> portFiveSoundsWithBitIndex {
-            {firstFleetMovementSound, 0},
-            {secondFleetMovementSound, 1},
-            {thirdFleetMovementSound, 2},
-            {fourthFleetMovementSound, 3},
-            {spaceshipShotSound, 4}
+        std::map<Mix_Chunk*, int> portFiveSoundsMappedToBitIndexes {
+            {firstFleetMovementSound, SoundCircuitryConstants::bitIndexOfFirstFleetMovementSound},
+            {secondFleetMovementSound, SoundCircuitryConstants::bitIndexOfSecondFleetMovementSound},
+            {thirdFleetMovementSound, SoundCircuitryConstants::bitIndexOfThirdFleetMovementSound},
+            {fourthFleetMovementSound, SoundCircuitryConstants::bitIndexOfFourthFleetMovementSound},
+            {spaceshipShotSound, SoundCircuitryConstants::bitIndexOfSpaceshipShotSound}
         };
 
+        std::map<Mix_Chunk*, int>& findMapOfSoundsAndBitIndexesForPortNumber(uint8_t portNumber);
+        void handleSoundForBitOfPort
+            (const std::pair<Mix_Chunk*, int>& soundWithBitIndex, uint8_t portNumber);
+        uint8_t& findPreviousByteForPortNumber(uint8_t portNumber);
+        bool isTheSpaceshipMakingSound(int bitIndex, uint8_t portNumber);
         void playSoundEffect(Mix_Chunk* sound);
+        void updatePreviousByteOfPortNumber(uint8_t portNumber, uint8_t byte);
 };
 
 

@@ -5,6 +5,10 @@
 #include <string>
 
 namespace DipswitchConstants {
+    const int numberOfLivesBitIndex{0};
+    const int bonusLifeBitIndex{3};
+    const int coinInfoHiddenBitIndex{7};
+
     // 0 = 3 lives, 1 = 4 lives, 2 = 5 lives, 3 = 6 lives
     const int numberOfLives{0};
 

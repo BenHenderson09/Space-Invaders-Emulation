@@ -7,7 +7,10 @@
 #include "GraphicalDisplay.hpp"
 #include "../../constants/GraphicalDisplayConstants.hpp"
 
-GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{}
+GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{processor}{
+    timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
+    timeWhenPreviousInterruptWasSent = std::chrono::steady_clock::now();
+}
 
 void GraphicalDisplay::startVideoOutput(){
     if (!hasVideoOutputStarted){
@@ -42,75 +45,104 @@ void GraphicalDisplay::openWindow(){
 }
 
 void GraphicalDisplay::drawFramesContinuously(){
-    double secondsPerFrame{1.0 / GraphicalDisplayConstants::framesPerSecond};
-    int processingTimeToDeductInMicroseconds{0};
-
-    timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
-
     while (true) {
-        std::chrono::duration<double> elapsedTimeSincePreviousFrameDrawnInSeconds {
-            std::chrono::steady_clock::now() - timeWhenPreviousFrameWasDrawn
-        };
-
-        int timeDelayInMicroseconds { // Wait time necessary to reach the specified fps
-            int((secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds.count()) * 1e6)
-        };
-
-        handleFrameDelay(timeDelayInMicroseconds, processingTimeToDeductInMicroseconds);
-
         timeWhenPreviousFrameWasDrawn = std::chrono::steady_clock::now();
         drawFrame();
+        handleFrameDelay();
     }
 }
 
-void GraphicalDisplay::handleFrameDelay(int timeDelayInMicroseconds,
-        int& processingTimeToDeductInMicroseconds){
-    if (timeDelayInMicroseconds >= 0){
-        int originalDelayInMicroseconds{timeDelayInMicroseconds};
-        timeDelayInMicroseconds -= processingTimeToDeductInMicroseconds;
+void GraphicalDisplay::handleFrameDelay(){
+    int microsecondsUntilNextFrame{calculateMicrosecondsUntilNextFrame()};
+    bool areWeBehindScheduleThisFrame{microsecondsUntilNextFrame < 0};
 
-        if (timeDelayInMicroseconds < 0) timeDelayInMicroseconds = 0;
-
-        processingTimeToDeductInMicroseconds -=
-            originalDelayInMicroseconds - timeDelayInMicroseconds;
-
-        std::this_thread::sleep_for (std::chrono::microseconds(timeDelayInMicroseconds));
+    if (!areWeBehindScheduleThisFrame){
+        sleepUntilNextFrame(microsecondsUntilNextFrame);
     }
     else {
-        // The time delay would be negative if the frame is getting drawn too slowly
-        processingTimeToDeductInMicroseconds += -timeDelayInMicroseconds;
+        // If we are behind schedule, "microsecondsUntilNextFrame" will be negative.
+        // Therefore, convert how far we're behind to a positive value and add this
+        // to "totalMicrosecondsBehindSchedule"
+        int microsecondsBehindScheduleThisFrame{-microsecondsUntilNextFrame};
+
+        totalMicrosecondsBehindSchedule += microsecondsBehindScheduleThisFrame;
     }
+}
+
+void GraphicalDisplay::sleepUntilNextFrame(int microsecondsUntilNextFrame){
+    int delayInMicroseconds{calculateFrameDelayInMicroseconds(microsecondsUntilNextFrame)};
+
+    // i.e how many microseconds has the maximum delay been reduced by to account for being
+    // behind schedule   
+    int microsecondsBehindScheduleAccountedFor{microsecondsUntilNextFrame - delayInMicroseconds};
+
+    totalMicrosecondsBehindSchedule -= microsecondsBehindScheduleAccountedFor;
+    std::this_thread::sleep_for (std::chrono::microseconds(delayInMicroseconds));
+}
+
+int GraphicalDisplay::calculateMicrosecondsUntilNextFrame(){
+    double secondsPerFrame{1.0 / GraphicalDisplayConstants::framesPerSecond};
+
+    double elapsedTimeSincePreviousFrameDrawnInSeconds {
+        (std::chrono::steady_clock::now() - timeWhenPreviousFrameWasDrawn).count() / 1e9
+    };    
+
+    double secondsUntilNextFrame {
+        secondsPerFrame - elapsedTimeSincePreviousFrameDrawnInSeconds
+    };
+
+    return static_cast<int>(secondsUntilNextFrame * 1e6);
+}
+
+int GraphicalDisplay::calculateFrameDelayInMicroseconds(int microsecondsUntilNextFrame){
+    // Reduce the delay to make up for how long we are behind schedule
+    int delayInMicroseconds{microsecondsUntilNextFrame - totalMicrosecondsBehindSchedule};
+
+    if (delayInMicroseconds < 0) delayInMicroseconds = 0; // Delay can't be negative
+
+    return delayInMicroseconds;
 }
 
 void GraphicalDisplay::notifyInstructionHasBeenExecuted(){
-    auto currentTime{std::chrono::steady_clock::now()};
+    double elapsedTimeSincePreviousInterruptSentInSeconds {
+        (std::chrono::steady_clock::now() - timeWhenPreviousInterruptWasSent).count() / 1e9
+    };    
 
-    std::chrono::duration<double> elapsedTimeSincePreviousInterruptSentInSeconds {
-        currentTime - timeWhenPreviousInterruptWasSent
+    double secondsPerInterrupt{1.0 / GraphicalDisplayConstants::interruptsPerSecond};
+
+    bool isAnInterruptDue {
+        elapsedTimeSincePreviousInterruptSentInSeconds >= secondsPerInterrupt
     };
 
-    // Alternate between two interrupts 120 times per
-    // second, meaning each interrupt operates at 60Hz
-    if (elapsedTimeSincePreviousInterruptSentInSeconds.count() >= 1.0 / GraphicalDisplayConstants::interruptsPerSecond){
-        timeWhenPreviousInterruptWasSent = std::chrono::steady_clock::now();
+    if (isAnInterruptDue){
+        handleFrameInterrupt();
+    }
+}
 
-        if (processor.areInterruptsEnabled()){
-            bool wasLastInterruptForEndOfFrame {
-                previousInterruptHandlerNumber ==
-                GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber
-            };
+void GraphicalDisplay::handleFrameInterrupt(){
+    timeWhenPreviousInterruptWasSent = std::chrono::steady_clock::now();
 
-            if (wasLastInterruptForEndOfFrame){
-                processor.interrupt(GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber);
-                previousInterruptHandlerNumber =
-                    GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber;
-            }
-            else {
-                processor.interrupt(GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber);
-                previousInterruptHandlerNumber =
-                    GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber;
-            }
-        }
+    // Alternate between interrupts for the end and middle of the frame
+    if (processor.areInterruptsEnabled()){ 
+        sendWhicheverFrameInterruptIsDue();
+    }
+}
+
+void GraphicalDisplay::sendWhicheverFrameInterruptIsDue(){
+    bool wasLastInterruptForEndOfFrame {
+        previousInterruptHandlerNumber ==
+        GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber
+    };
+
+    if (wasLastInterruptForEndOfFrame){
+        processor.interrupt(GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber);
+        previousInterruptHandlerNumber =
+            GraphicalDisplayConstants::middleOfFrameInterruptHandlerNumber;
+    }
+    else {
+        processor.interrupt(GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber);
+        previousInterruptHandlerNumber =
+            GraphicalDisplayConstants::endOfFrameInterruptHandlerNumber;
     }
 }
 

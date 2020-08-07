@@ -16,6 +16,8 @@ class KeypressHandler : public Intel8080::ProcessorObserver {
         std::chrono::time_point<std::chrono::steady_clock> timeWhenLastKeypressHandled;
 
         void handleKeypresses();
+        void handleKeydown(const SDL_Keycode& key);
+        void handleKeyup(const SDL_Keycode& key);
 };
 
 #endif

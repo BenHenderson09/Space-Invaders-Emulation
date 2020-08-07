@@ -2,19 +2,53 @@
 #define INTERACTIVE_DEVICES_HPP
 
 #include "../InteractiveDevice/InteractiveDevice.hpp"
+#include "../../constants/InteractiveDeviceConstants.hpp"
 
 struct InteractiveDevices {
-    InteractiveDevice coinSlot{1, 0};
+    InteractiveDevice coinSlot {
+        InteractiveDeviceConstants::coinSlotPortNumber,
+        InteractiveDeviceConstants::coinSlotBitIndex
+    };
 
-    InteractiveDevice playerOneStartButton{1, 2};
-    InteractiveDevice playerOneShootButton{1, 4};
-    InteractiveDevice playerOneLeft{1, 5};
-    InteractiveDevice playerOneRight{1, 6};
-    
-    InteractiveDevice playerTwoStartButton{1, 1};
-    InteractiveDevice playerTwoShootButton{2, 4};
-    InteractiveDevice playerTwoLeft{2, 5};
-    InteractiveDevice playerTwoRight{2, 6};
+    InteractiveDevice playerOneStartButton {
+        InteractiveDeviceConstants::playerOneStartButtonPortNumber,
+        InteractiveDeviceConstants::playerOneStartButtonBitIndex
+    };
+
+    InteractiveDevice playerOneShootButton {
+        InteractiveDeviceConstants::playerOneShootButtonPortNumber,
+        InteractiveDeviceConstants::playerOneShootButtonBitIndex
+    };
+
+    InteractiveDevice playerOneLeft {
+        InteractiveDeviceConstants::playerOneLeftPortNumber,
+        InteractiveDeviceConstants::playerOneLeftBitIndex
+    };
+
+    InteractiveDevice playerOneRight {
+        InteractiveDeviceConstants::playerOneRightPortNumber,
+        InteractiveDeviceConstants::playerOneRightBitIndex
+    };
+
+    InteractiveDevice playerTwoStartButton {
+        InteractiveDeviceConstants::playerTwoStartButtonPortNumber,
+        InteractiveDeviceConstants::playerTwoStartButtonBitIndex
+    };
+
+    InteractiveDevice playerTwoShootButton {
+        InteractiveDeviceConstants::playerTwoShootButtonPortNumber,
+        InteractiveDeviceConstants::playerTwoShootButtonBitIndex
+    };
+
+    InteractiveDevice playerTwoLeft {
+        InteractiveDeviceConstants::playerTwoLeftPortNumber,
+        InteractiveDeviceConstants::playerTwoLeftBitIndex
+    };
+
+    InteractiveDevice playerTwoRight {
+        InteractiveDeviceConstants::playerTwoRightPortNumber,
+        InteractiveDeviceConstants::playerTwoRightBitIndex
+    };
 };
 
 #endif

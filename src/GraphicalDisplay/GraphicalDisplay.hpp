@@ -25,6 +25,7 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
         // Timekeeping
         std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousInterruptWasSent;
         std::chrono::time_point<std::chrono::steady_clock> timeWhenPreviousFrameWasDrawn;
+        int totalMicrosecondsBehindSchedule{0};
 
         // We use this to know when to send interrupts
         // to the processor and which interrupts to send
@@ -32,8 +33,12 @@ class GraphicalDisplay : public Intel8080::ProcessorObserver {
 
         void openWindow();
         void drawFramesContinuously();
-        void handleFrameDelay(int timeDelayInMicroseconds,
-            int& processingTimeToDeductInMicroseconds);
+        void handleFrameDelay();
+        void sleepUntilNextFrame(int microsecondsUntilNextFrame);
+        int calculateMicrosecondsUntilNextFrame();
+        int calculateFrameDelayInMicroseconds(int microsecondsUntilNextFrame);
+        void handleFrameInterrupt();
+        void sendWhicheverFrameInterruptIsDue();
         void drawFrame();
         void drawPixelWithRotation(int row, int col);
         bool isPixelColoured(int row, int col);

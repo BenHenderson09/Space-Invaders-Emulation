@@ -6,9 +6,20 @@
 #include "../../constants/DipswitchConstants.hpp"
 
 struct Dipswitches {
-    TwoBitDipswitch numberOfLives{0, DipswitchConstants::numberOfLives};
-    SingleBitDipswitch bonusLifeScore{3, DipswitchConstants::isBonusLifeAtOneThousandPoints};
-    SingleBitDipswitch coinInfoHidden{7, DipswitchConstants::isCoinInfoHidden};
+    TwoBitDipswitch numberOfLivesSwitch {
+        DipswitchConstants::numberOfLivesBitIndex,
+        DipswitchConstants::numberOfLives
+    };
+
+    SingleBitDipswitch bonusLifeSwitch {
+        DipswitchConstants::bonusLifeBitIndex,
+        DipswitchConstants::isBonusLifeAtOneThousandPoints
+    };
+
+    SingleBitDipswitch coinInfoHiddenSwitch {
+        DipswitchConstants::coinInfoHiddenBitIndex,
+        DipswitchConstants::isCoinInfoHidden
+    };
 };
 
 #endif

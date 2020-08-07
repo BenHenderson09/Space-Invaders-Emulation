@@ -9,7 +9,8 @@ uint8_t TwoBitDipswitch::readByte(uint8_t portNumber, uint8_t accumulatorState) 
         bool firstBit{switchValue & 1};
         bool secondBit{switchValue & (1 << 1)};
         
-        // Clear the bit at the index, and then set this bit to the switch value
+        // Clear the bit at the index, and then set this bit to the switch value.
+        // Do the same for the bit at the index one place above.
         accumulatorState = (accumulatorState & ~(1 << bitIndex)) | (firstBit << bitIndex);
         accumulatorState = (accumulatorState & ~(1 << (bitIndex+1))) | (secondBit << (bitIndex+1));
     }
