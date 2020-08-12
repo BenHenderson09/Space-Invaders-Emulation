@@ -15,10 +15,7 @@ GraphicalDisplay::GraphicalDisplay(Intel8080::Processor& processor) : processor{
 void GraphicalDisplay::startVideoOutput(){
     if (!hasVideoOutputStarted){
         openWindow();
-        
-        // Run in a separate detached thread
         std::thread(&GraphicalDisplay::drawFramesContinuously, this).detach();
-        
         hasVideoOutputStarted = true;
     }
     else {
@@ -57,7 +54,9 @@ void GraphicalDisplay::handleFrameDelay(){
     bool areWeBehindScheduleThisFrame{microsecondsUntilNextFrame < 0};
 
     if (!areWeBehindScheduleThisFrame){
+        handleFrameInterrupt();
         sleepUntilNextFrame(microsecondsUntilNextFrame);
+        handleFrameInterrupt();
     }
     else {
         // If we are behind schedule, "microsecondsUntilNextFrame" will be negative.
@@ -101,22 +100,6 @@ int GraphicalDisplay::calculateFrameDelayInMicroseconds(int microsecondsUntilNex
     if (delayInMicroseconds < 0) delayInMicroseconds = 0; // Delay can't be negative
 
     return delayInMicroseconds;
-}
-
-void GraphicalDisplay::notifyInstructionHasBeenExecuted(){
-    double elapsedTimeSincePreviousInterruptSentInSeconds {
-        (std::chrono::steady_clock::now() - timeWhenPreviousInterruptWasSent).count() / 1e9
-    };    
-
-    double secondsPerInterrupt{1.0 / GraphicalDisplayConstants::interruptsPerSecond};
-
-    bool isAnInterruptDue {
-        elapsedTimeSincePreviousInterruptSentInSeconds >= secondsPerInterrupt
-    };
-
-    if (isAnInterruptDue){
-        handleFrameInterrupt();
-    }
 }
 
 void GraphicalDisplay::handleFrameInterrupt(){

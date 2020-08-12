@@ -6,11 +6,10 @@
 #include <SDL2/SDL.h>
 #include <Intel8080Emulator/Intel8080.hpp>
 
-class GraphicalDisplay : public Intel8080::ProcessorObserver {
+class GraphicalDisplay {
     public:
         GraphicalDisplay(Intel8080::Processor& processor);
 
-        virtual void notifyInstructionHasBeenExecuted() override;
         void startVideoOutput();
 
     private:

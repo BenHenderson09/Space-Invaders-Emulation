@@ -24,7 +24,6 @@ int main(){
     KeypressHandler keypressHandler{interactiveDevices};
 
     // Linking the devices up to the processor
-    processor.attachObserver(display);
     processor.attachObserver(keypressHandler);
     processor.attachInputDevice(shiftRegister);
     processor.attachOutputDevice(shiftRegister);
@@ -44,7 +43,6 @@ int main(){
 
     // Starting up the game
     display.startVideoOutput();
-
     processor.beginEmulation();
 
     return 0;
